@@ -1,0 +1,1 @@
+sudo -u tomcat /opt/jdk/bin/keytool -providerpath /opt/jcp/JCP.jar:/opt/jcp/ASN1P.jar:/opt/jcp/asn1rt.jar:/opt/jcp/forms_rt.jar  -list -provider ru.CryptoPro.JCP.JCP -storetype HDImageStore -keystore NONE -storepass "" -J-Dkeytool.compat=true -J-Duse.cert.stub=true | grep -v -E "Certificate|Keystore type|Keystore provider|Your keystore" | grep -v '^$' | grep -o '^[^,]*'
