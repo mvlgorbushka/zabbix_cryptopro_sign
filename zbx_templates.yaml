@@ -1,0 +1,73 @@
+zabbix_export:
+  version: '7.0'
+  
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 1a911b8850a14da988c13ead432cc8c6
+      template: 'CPROSPC HDImageStore'
+      name: 'CPROSPC HDImageStore'
+      vendor:
+        name: gorbushka.name
+        version: 7.0-0
+      groups:
+        - name: Templates/Applications
+      discovery_rules:
+        - uuid: 9943acabbe6a4f06959f1f7ecba97485
+          name: 'КриптоПро контейнеры'
+          key: cprocsp.discovery.alias
+          delay: 1h
+          lifetime: '0'
+          lifetime_type: DELETE_IMMEDIATELY
+          item_prototypes:
+            - uuid: d2e5efb06fbc4b94b93ba837ec5060d4
+              name: 'Срок действия контейнера {#ALIAS}'
+              key: 'cprocsp.alias.exp_date["{#ALIAS}", "{$KEYTOOLPATH}", "{$JCPPATH}", "{$USER}"]'
+              delay: 1h
+              units: unixtime
+              preprocessing:
+                - type: JAVASCRIPT
+                  parameters:
+                    - |
+                      var lines = value.split('\n');
+                      lines.splice(0, 4);
+                      var newText = lines.join('\n');
+                      return newText;
+                - type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1d
+              tags:
+                - tag: component
+                  value: cprocsp
+              trigger_prototypes:
+                - uuid: 3a835b96c0f54cd4acbd68616bf48607
+                  expression: '(last(/CPROSPC HDImageStore/cprocsp.alias.exp_date["{#ALIAS}", "{$KEYTOOLPATH}", "{$JCPPATH}", "{$USER}"]) - now()) / 86400 < {$EXPIRY_WARN}'
+                  name: 'Заканчивается срок действия контейнера {#ALIAS}'
+                  priority: HIGH
+          timeout: 10s
+          lld_macro_paths:
+            - lld_macro: '{#ALIAS}'
+              path: $.alias
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - |
+                  var lines = value.split('\n');
+                  lines.splice(0, 4);
+                  var jsonArray = lines.map(function (line) { return { alias: line } })
+                  var jsonString = JSON.stringify(jsonArray, null, 2);
+                  return jsonString;
+      macros:
+        - macro: '{$EXPIRY_WARN}'
+          value: '7'
+          description: 'За сколько дней оповещать'
+        - macro: '{$JCPPATH}'
+          value: /opt/jcp/
+          description: 'Путь до библиотек КриптоПро JCP'
+        - macro: '{$KEYTOOLPATH}'
+          value: /opt/jdk/bin/
+          description: 'Путь до keytool'
+        - macro: '{$USER}'
+          value: tomcat
+          description: 'Владелец HDImageStore'
