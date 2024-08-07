@@ -5,15 +5,15 @@
 Мониторинг срока действия электронной подписи КриптоПро в HDImageStore на серверах с JCP
 
 ## Требования
-Zabbix: 7.0 или выше.
-OpenJDK
-КриптоПро JCP
+- Zabbix: 7.0 или выше.
+- OpenJDK
+- КриптоПро JCP
 
 ## Тестировалось на версиях
-Zabbix 7.0.1
-Adoptium OpenJDK Temurin-11.0.17+8
-КриптоПро JCP v 2.0.40450-A
-Debian 10, 11, 12 | AltLinux 8 SP c9f2
+- Zabbix 7.0.1
+- Adoptium OpenJDK Temurin-11.0.17+8
+- КриптоПро JCP v 2.0.40450-A
+- Debian 10, 11, 12 | AltLinux 8 SP c9f2
 
 ## Установка
 1. Предоставьте пользователю Zabbix на сервере, который планируете мониторить, права sudo без пароля
