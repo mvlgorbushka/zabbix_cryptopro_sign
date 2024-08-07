@@ -3,15 +3,24 @@
 # Sign CryptoPro by Zabbix Agent
 ## Описание
 Мониторинг срока действия электронной подписи КриптоПро в HDImageStore на серверах с JCP
+
 ## Требования
 Zabbix: 7.0 или выше.
+OpenJDK
+КриптоПро JCP
+
+## Тестировалось на версиях
+Zabbix 7.0.1
+Adoptium OpenJDK Temurin-11.0.17+8
+КриптоПро JCP v 2.0.40450-A
+Debian 10, 11, 12 | AltLinux 8 SP c9f2
 
 ## Установка
 1. Предоставьте пользователю Zabbix на сервере, который планируете мониторить, права sudo без пароля
 
-2. Скопируйте файлы var/lib/zabbix в папку /var/lib/zabbix и etc/zabbix/zabbix_agentd.conf.d в папку /etc/zabbix/zabbix_agentd.conf.d на сервер, который планируете мониторить. Файлы должны иметь владельца zabbix. Перезапустите сервис zabbix агента.
+2. Скопируйте файлы `var/lib/zabbix` в папку `/var/lib/zabbix` и `etc/zabbix/zabbix_agentd.conf.d` в папку `/etc/zabbix/zabbix_agentd.conf.d` на сервер, который планируете мониторить. Файлы должны иметь владельца zabbix. Перезапустите сервис zabbix агента.
 
-3. Импортируйте шаблон zbx_templates.yaml в Zabbix сервер и подключите его для требуемых серверов.
+3. Импортируйте шаблон `zbx_templates.yaml` в Zabbix сервер и подключите его для требуемых серверов.
 
 4. Заполните макросы для серверов, если их значения по умолчанию не подходят.
 
